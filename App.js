@@ -1,20 +1,69 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, Text, View} from 'react-native';
+import ProductListing from './src/screens/ProductListing';
+import ProductDetails from './src/screens/ProductDetails';
+import Favorites from './src/screens/Favorites';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import ProductContext from './src/context';
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function BottomsTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="ProductDetails"
+        component={ProductListing}
+        options={{
+          title: 'Product Listing',
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Tab.Screen
+        name="Favorites"
+        component={Favorites}
+        options={{
+          title: 'Favorites',
+          headerTitleAlign: 'center',
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ProductContext>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="BottomsTabs"
+              component={BottomsTabs}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="productDetails"
+              component={ProductDetails}
+              options={{
+                title: 'Product Details',
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    </ProductContext>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
