@@ -25,6 +25,11 @@ const ProductContext = ({children}) => {
     }
     setFavorites(cypFavoriteItems);
   };
+  const handleRemoveFavorite = id => {
+    let cypFavoriteItems = [...favorites];
+    cypFavoriteItems = cypFavoriteItems.filter(item => item.id !== id);
+    setFavorites(cypFavoriteItems);
+  };
   useEffect(() => {
     setLoading(true);
     async function getProducts() {
@@ -40,7 +45,14 @@ const ProductContext = ({children}) => {
     getProducts();
   }, []);
   return (
-    <Context.Provider value={{products, loading, addToFavorites, favorites}}>
+    <Context.Provider
+      value={{
+        products,
+        loading,
+        addToFavorites,
+        favorites,
+        handleRemoveFavorite,
+      }}>
       {children}
     </Context.Provider>
   );

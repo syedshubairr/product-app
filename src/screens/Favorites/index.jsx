@@ -5,11 +5,11 @@ import {styles} from './styles';
 import FavoriteItem from '../../components/FavoriteItem';
 
 export default function Favorites() {
-  const {favorites} = useContext(Context);
-  if (!favorites) {
+  const {favorites, handleRemoveFavorite} = useContext(Context);
+  if (!favorites.length) {
     return (
       <View style={styles.noFavorites}>
-        <Text style={styles.noFavoritesText}>No Favorite Items Added</Text>
+        <Text style={styles.noFavoritesText}>No Favorite Items Added!</Text>
       </View>
     );
   }
@@ -21,6 +21,8 @@ export default function Favorites() {
           <FavoriteItem
             title={itemData.item.title}
             reason={itemData.item.reason}
+            handleRemoveFavorite={handleRemoveFavorite}
+            id={itemData.item.id}
           />
         )}
         keyExtractor={itemData => itemData.id}
