@@ -17,6 +17,11 @@ const ProductContext = ({children}) => {
         id: productId,
         reason: reason,
       });
+    } else {
+      cypFavoriteItems[index] = {
+        ...cypFavoriteItems[index],
+        reason: reason,
+      };
     }
     setFavorites(cypFavoriteItems);
   };
