@@ -1,15 +1,21 @@
 import {useContext} from 'react';
-import {
-  ActivityIndicator,
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import {ActivityIndicator, Text, View, FlatList} from 'react-native';
 import {Context} from '../../context';
+import {styles} from './styles';
+import ProductListingItem from '../../components/ProductListingItem';
+
+function createRandomColor() {
+  let letter = '0123456789ABCDEF';
+  let color = '#';
+  for (let index = 0; index < 6; index++) {
+    color += letter[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 export default function ProductListing() {
   const {loading, products} = useContext(Context);
+  const handleOnPress = () => {};
   if (loading) {
     return (
       <ActivityIndicator style={styles.loader} color={'black'} size={'large'} />
@@ -19,18 +25,17 @@ export default function ProductListing() {
     <View>
       <FlatList
         data={products}
-        renderItem={itemData => <Text>{itemData.item.title}</Text>}
+        renderItem={itemData => (
+          <ProductListingItem
+            title={itemData.item.title}
+            bgColor={createRandomColor()}
+            onPress={handleOnPress}
+          />
+        )}
         keyExtractor={itemData => itemData.id}
+        numColumns={2}
       />
       <Text>Product Listing Page</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  loader: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
