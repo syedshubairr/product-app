@@ -6,11 +6,19 @@ const ProductContext = ({children}) => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
   const addToFavorites = (productId, reason) => {
-    const index = favorites.findIndex(f => f.id === productId);
+    let cypFavoriteItems = [...favorites];
+    const index = cypFavoriteItems.findIndex(f => f.id === productId);
     if (index == -1) {
-      setFavorites([...favorites, products[index].title]);
+      let getCurrentProduct = products.find(
+        product => product.id === productId,
+      );
+      cypFavoriteItems.push({
+        title: getCurrentProduct.title,
+        id: productId,
+        reason: reason,
+      });
     }
-    console.log(favorites);
+    setFavorites(cypFavoriteItems);
   };
   useEffect(() => {
     setLoading(true);
