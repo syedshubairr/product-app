@@ -1,14 +1,27 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
-import {ActivityIndicator, Button, Text, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  Modal,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import ProductDetailsItem from '../../components/ProductDetailsItem';
+import {styles} from './styles';
+import {Context} from '../../context';
 
 export default function ProductDetails() {
   const route = useRoute();
   const navigation = useNavigation();
   const {productId} = route.params;
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [reason, setReason] = useState('');
   const [productDetails, setProductDetails] = useState([]);
+  const {addToFavorites} = useContext(Context);
   useEffect(() => {
     setLoading(true);
     async function getData() {
@@ -24,17 +37,55 @@ export default function ProductDetails() {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <Button title="Add Favorite" />;
+        return (
+          <Button onPress={() => setModalVisible(true)} title="Add Favorite" />
+        );
       },
     });
   }, []);
-  console.log(productDetails);
+  const handleOnChange = enteredText => {
+    setReason(enteredText);
+  };
   if (loading) {
     return <ActivityIndicator color={'black'} size={'large'} />;
   }
   return (
     <View>
       <ProductDetailsItem productDetails={productDetails} />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TextInput
+              placeholder="Why do you like this product?"
+              onChangeText={handleOnChange}
+              value={reason}
+              style={styles.reasonTextInput}
+            />
+            <View style={styles.buttonWrapper}>
+              <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  addToFavorites(productId, reason);
+                }}>
+                <Text style={styles.textStyle}>Add Favorite</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
