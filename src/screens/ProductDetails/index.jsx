@@ -53,7 +53,7 @@ export default function ProductDetails() {
         );
       },
     });
-  }, []);
+  }, [isFavorite]);
   const handleOnChange = enteredText => {
     setReason(enteredText);
   };
@@ -85,6 +85,7 @@ export default function ProductDetails() {
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   addToFavorites(productId, reason);
+                  setReason('');
                 }}>
                 <Text style={styles.textStyle}>
                   {isFavorite && isFavorite.length > 0 ? 'Update' : 'Add'}
@@ -92,7 +93,10 @@ export default function ProductDetails() {
               </Pressable>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setReason('');
+                }}>
                 <Text style={styles.textStyle}>Close</Text>
               </Pressable>
             </View>

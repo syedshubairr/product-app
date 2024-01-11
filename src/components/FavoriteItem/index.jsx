@@ -9,7 +9,9 @@ export default function FavoriteItem({
 }) {
   return (
     <View style={styles.favoriteItemContainer}>
-      <Pressable onPress={() => handleRemoveFavorite(id)}>
+      <Pressable
+        onPress={() => handleRemoveFavorite(id)}
+        android_ripple={{color: '#ced474'}}>
         <Text style={styles.text}>{title}</Text>
         <Text style={styles.text}>{reason}</Text>
       </Pressable>
